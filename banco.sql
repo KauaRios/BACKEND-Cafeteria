@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS Tipo (
 CREATE TABLE IF NOT EXISTS Produto (
     id_produto INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
-    descricao TEXT, -- Adicionado descrição
+    descricao TEXT, 
     valor DECIMAL(10,2) NOT NULL,
-    quantidade INT DEFAULT 0, -- Adicionado controle de estoque
-    imagem VARCHAR(255), -- Imagem agora é opcional
+    quantidade INT DEFAULT 0, 
+    imagem VARCHAR(255), 
     
     id_tipo INT UNSIGNED,
     FOREIGN KEY (id_tipo) REFERENCES Tipo(id_tipo) ON DELETE SET NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Produto (
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 4. Tabela de Logs (Agora ligada ao Usuário)
+-- 4. Tabela de Logs
 CREATE TABLE IF NOT EXISTS Log_BD (
     id_log INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     data_evento TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
