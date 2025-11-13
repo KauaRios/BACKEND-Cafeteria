@@ -24,7 +24,7 @@ function registrar_log(PDO $pdo, string $nivel, string $mensagem, ?array $contex
         
     }
 
-    // Mantemos isso porque se o Banco cair, ainda consegue ler o erro no arquivo.
+  
     try {
         $logDir = __DIR__ . '/../logs';
         $logFile = $logDir . '/app.log';
@@ -35,7 +35,7 @@ function registrar_log(PDO $pdo, string $nivel, string $mensagem, ?array $contex
 
         $dataHora = date('Y-m-d H:i:s');
         
-        // Adicionamos o ID do usuário no texto também
+      
         $userStr = $id_usuario ? "[User ID: $id_usuario]" : "[Sistema]";
         
         $linhaLog = "[$dataHora] [$nivel] $userStr $mensagem";
