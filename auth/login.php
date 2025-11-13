@@ -27,7 +27,7 @@ try {
 
         if(function_exists('registrar_log')) {
           
-            // Passamos o $user['id'] no final para ligar o log à pessoa no Banco
+            //$user['id'] no final para ligar o log à pessoa no Banco
             registrar_log($pdo, 'INFO', 'Login bem-sucedido', ['email' => $email], $user['id']);
         }
         
@@ -35,7 +35,7 @@ try {
         exit;
         
     } else {
-        // Aqui NÃO passamos ID, pois o login falhou 
+        /
         if(function_exists('registrar_log')) {
             registrar_log($pdo, 'WARNING', 'Tentativa de login falhou', ['email' => $email]);
         }
