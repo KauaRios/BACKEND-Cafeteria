@@ -30,12 +30,12 @@ try {
 
     $pdo = new PDO($dsn, $user, $pass, $options);
     
-
+    // Caso haja erro, registra no log
 
 } catch (\PDOException $e) {
         registrar_log($pdo, 'ERROR', 'Falha na conexão com o banco de dados', ['error_message'=> $e->getMessage()]);
         
-
+//
     if (!is_dir($log_path)) {
         mkdir($log_path, 0755, true);
     }

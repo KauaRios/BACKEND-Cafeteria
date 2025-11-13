@@ -14,12 +14,15 @@ if (empty($email) || empty($password)) {
 }
 
 try {
+    //quando usuario tenta logar, busca no banco
     $stmt = $pdo->prepare("SELECT * FROM Usuario WHERE email_login = :email LIMIT 1");
+    //executa a busca
     $stmt->execute([':email' => $email]);
+    //pega o resultado
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    //verifica se achou e se a senha bate
     if ($user && password_verify($password, $user['senha_hash'])) {
-
+        // Configura variáveis de sessão
         $_SESSION['user_id'] = $user['id']; 
         $_SESSION['user_name'] = $user['nome'];
         $_SESSION['user_email'] = $user['email_login'];
