@@ -4,10 +4,8 @@ session_start();
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/funcoes.php';
 
-
 $email = trim($_POST['email'] ?? ''); 
 $password = trim($_POST['password'] ?? ''); 
-
 
 if (empty($email) || empty($password)) {
     $error = "Preencha e-mail e senha.";
@@ -16,30 +14,28 @@ if (empty($email) || empty($password)) {
 }
 
 try {
-    // 3. Busca no banco (A coluna do banco é 'email_login')
     $stmt = $pdo->prepare("SELECT * FROM Usuario WHERE email_login = :email LIMIT 1");
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  
     if ($user && password_verify($password, $user['senha_hash'])) {
 
-        // 5. CORREÇÃO: Salvamos o 'id' (não 'cpf')
         $_SESSION['user_id'] = $user['id']; 
         $_SESSION['user_name'] = $user['nome'];
         $_SESSION['user_email'] = $user['email_login'];
         $_SESSION['logged_in'] = true;
 
         if(function_exists('registrar_log')) {
-            registrar_log($pdo, 'INFO', 'Login bem-sucedido', ['user_id' => $user['id'], 'email' => $email]);
+          
+            // Passamos o $user['id'] no final para ligar o log à pessoa no Banco
+            registrar_log($pdo, 'INFO', 'Login bem-sucedido', ['email' => $email], $user['id']);
         }
         
-        // Sucesso! Vai para o dashboard
         header("Location: ../dashboard.php");
         exit;
         
     } else {
-        // Se o $user não existir OU a senha estiver errada
+        // Aqui NÃO passamos ID, pois o login falhou 
         if(function_exists('registrar_log')) {
             registrar_log($pdo, 'WARNING', 'Tentativa de login falhou', ['email' => $email]);
         }

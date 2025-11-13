@@ -1,38 +1,54 @@
 <?php
+// config/funcoes.php
 
-function registrar_log(PDO $pdo, string $nivel, string $mensagem, ?array $contexto = null) {
-    try {
-        $sql = "INSERT INTO Log_BD (nivel, mensagem, contexto) VALUES (:nivel, :mensagem, :contexto)";
-        $stmt = $pdo->prepare($sql);
+
+function registrar_log(PDO $pdo, string $nivel, string $mensagem, ?array $contexto = null, ?int $id_usuario = null) {
     
-        $contexto_str = $contexto ? json_encode($contexto) : null;
+    // 1. SALVA NO BANCO DE DADOS 
+    try {
+        $contexto_str = $contexto ? json_encode($contexto, JSON_UNESCAPED_UNICODE) : null;
 
-        $stmt->execute([':nivel' => $nivel,
-            ':mensagem' => $mensagem,
-            ':contexto' => $contexto_str]);
+      
+        $sql = "INSERT INTO Log_BD (nivel, mensagem, contexto, id_usuario) 
+                VALUES (:nivel, :mensagem, :contexto, :id_usuario)";
+        
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([
+            ':nivel'      => $nivel,
+            ':mensagem'   => $mensagem,
+            ':contexto'   => $contexto_str,
+            ':id_usuario' => $id_usuario // Aqui ligamos o log à pessoa!
+        ]);
     } catch (PDOException $e) {
-        //Só para garantir que não vai travar em loop infinito...
+        
     }
 
+    // Mantemos isso porque se o Banco cair, ainda consegue ler o erro no arquivo.
+    try {
+        $logDir = __DIR__ . '/../logs';
+        $logFile = $logDir . '/app.log';
 
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
 
+        $dataHora = date('Y-m-d H:i:s');
+        
+        // Adicionamos o ID do usuário no texto também
+        $userStr = $id_usuario ? "[User ID: $id_usuario]" : "[Sistema]";
+        
+        $linhaLog = "[$dataHora] [$nivel] $userStr $mensagem";
+        
+        if ($contexto) {
+            $linhaLog .= " | Dados: " . json_encode($contexto, JSON_UNESCAPED_UNICODE);
+        }
+        $linhaLog .= PHP_EOL;
 
-    $logDir = __DIR__ . '/../logs';
-    $logFile = $logDir . '/app.log';
-
-
-
-    if(!is_dir($logDir)) {
-        mkdir($logDir, 0777, true);
+        file_put_contents($logFile, $linhaLog, FILE_APPEND);
+        
+    } catch (Exception $e) {
+        // Ignora erro de arquivo
     }
-
-
-
-    $logEntry = "[" . date('Y-m-d H:i:s') . "] [$nivel] $mensagem";
-    if ($contexto) {
-        $logEntry .= ' | Contexto: ' . json_encode($contexto);
-    }
-    $logEntry .= PHP_EOL;
-    //escreve no arquivo de log
-    file_put_contents($logFile, $logEntry, FILE_APPEND | LOCK_EX);
 }
+?>
