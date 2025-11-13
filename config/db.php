@@ -33,8 +33,8 @@ try {
 
 
 } catch (\PDOException $e) {
-    $log_path = __DIR__ . '/../logs'; 
-    $log_file = $log_path . '/app.log';
+        registrar_log($pdo, 'ERROR', 'Falha na conexão com o banco de dados', ['error_message'=> $e->getMessage()]);
+        
 
     if (!is_dir($log_path)) {
         mkdir($log_path, 0755, true);
