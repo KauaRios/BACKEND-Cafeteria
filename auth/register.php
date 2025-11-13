@@ -44,10 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     ':password_hash' => $hashedPassword
                 ]);
 
-                // 2. CORREÇÃO: Pegamos o ID gerado pelo banco
+           
                 $novoId = $pdo->lastInsertId();
 
-                // 3. CORREÇÃO: Passamos o ID para o log (agora fica ligado ao usuário!)
+              
                 if(function_exists('registrar_log')) {
                     registrar_log($pdo, 'INFO', 'Novo usuário registrado', ['email' => $email], $novoId);
                 }
