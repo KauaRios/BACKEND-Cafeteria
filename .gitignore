@@ -1,0 +1,25 @@
+
+.env
+.env.local
+.env.*
+
+
+*.log
+
+/logs/
+
+/vendor/
+
+# 4. ARQUIVOS DO SISTEMA OPERACIONAL (LIXO)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+
+docker-compose.override.yml
