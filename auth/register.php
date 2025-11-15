@@ -104,9 +104,7 @@ try {
         registrar_log($pdo, 'INFO', 'Novo usuário registrado', ['email' => $email], $novoId);
     }
 
-    // -----------------------------------------------------------------
-    // 4. RESPOSTA DE SUCESSO EM JSON
-    // -----------------------------------------------------------------
+   
     http_response_code(201); // 201 = Created
     echo json_encode(['success' => true, 'message' => 'Cadastro Realizado com sucesso!']);
     exit;
