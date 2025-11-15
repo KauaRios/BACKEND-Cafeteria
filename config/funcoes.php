@@ -1,7 +1,7 @@
 <?php
 // config/funcoes.php
 
-// Função para registrar logs tanto no banco de dados quanto em arquivo
+// Funçao para registrar logs de eventos
 function registrar_log(PDO $pdo, string $nivel, string $mensagem, ?array $contexto = null, ?int $id_usuario = null) {
     
     // 1. SALVA NO BANCO DE DADOS 

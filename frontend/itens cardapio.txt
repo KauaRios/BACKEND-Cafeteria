@@ -1,0 +1,13 @@
+1- Entrada
+2- Sashimi
+3- Sushi
+4- Rolls
+5- Pratos Quentes
+6- Temaki
+7- Jyo
+8- Hots
+9- Combinados
+10- Hamburguers
+11- Sobremesas
+12- Bebidas
+13- Bebidas alcólicas

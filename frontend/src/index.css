@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+@import "tailwindcss";
+
+body{
+    background-color: #261a10;
+}
+
+.archivo{
+    font-family: 'Archivo', sans-serif;
+}
+
+.lora{
+    font-family: 'Lora', serif;
+}
+
+.roboto{
+    font-family: 'Roboto Mono', monospace;
+}
+
+.container{
+    margin: 0 auto;
+    width: 90%;
+}
+
+.container-about{
+    margin: 0 auto;
+    width: 75%;
+}
+
+.image-carousel-section {
+  position: relative;
+  transition: background-image 0s ease-in-out;
+  --next-background: none;
+}
+
+.image-carousel-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--next-background);
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.image-carousel-section.fade-transition::before {
+  opacity: 1;
+}
+
+/* #D94D1A */

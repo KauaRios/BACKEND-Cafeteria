@@ -45,10 +45,38 @@ CREATE TABLE IF NOT EXISTS Log_BD (
     mensagem VARCHAR(255) NOT NULL,
     contexto TEXT,
     
+
+
+
  
     id_usuario INT UNSIGNED DEFAULT NULL,
     FOREIGN KEY (id_usuario) REFERENCES Usuario(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- 5. Tabela de Tokens de Autenticação (Manter Conectado)
+CREATE TABLE IF NOT EXISTS auth_tokens (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    
+    -- Chave estrangeira ligada ao  usuário
+    user_id INT UNSIGNED NOT NULL,
+    
+    -- O hash do token que você vai armazenar
+    token_hash VARCHAR(255) NOT NULL UNIQUE,
+    
+    -- A data que o token expira
+    expires_at DATETIME NOT NULL,
+    
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Se o usuário for deletado, todos os tokens dele são apagados
+    FOREIGN KEY (user_id) 
+        REFERENCES Usuario(id) 
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 -- Índices para deixar o banco rápido
 CREATE INDEX idx_produto_tipo ON Produto(id_tipo);
