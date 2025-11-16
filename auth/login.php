@@ -26,7 +26,7 @@ $password = trim($_POST['password'] ?? '');
 
 if (empty($email) || empty($password)) {
     http_response_code(400);// Bad Request
-    // CORREÇÃO: 'success' (com 'c' duas vezes)
+ 
     echo json_encode(['success' => false, 'error' => 'E-mail e senha são obrigatórios.']);
     exit;
 }
@@ -103,7 +103,7 @@ try {
         registrar_log($pdo, 'ERROR', 'Erro de BD no login', ['error_message' => $e->getMessage()]);
     }
     http_response_code(500); // Internal Server Error
-    // CORREÇÃO: 'success' e 'error'
+  
     echo json_encode([
         'success' => false,
         'error' => 'Erro no servidor. Tente novamente mais tarde.'
