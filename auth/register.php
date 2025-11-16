@@ -82,7 +82,7 @@ try {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     
-    // 3. SQL MODIFICADO PARA INCLUIR OS NOVOS CAMPOS
+
     
     $sql = "INSERT INTO Usuario (nome, email_login, senha_hash, cpf, num_tel, data_nasc) 
             VALUES (:name, :email, :password_hash, :cpf, :num_tel, :data_nasc)";
@@ -114,7 +114,7 @@ try {
         registrar_log($pdo, 'ERROR', 'Falha ao registrar', ['error_message'=> $e->getMessage()]);
     }
    
-    // 5. RESPOSTA DE ERRO EM JSON
+    //RESPOSTA DE ERRO EM JSON
     
     http_response_code(500); // 500 = Internal Server Error
     echo json_encode(['success' => false, 'error' => 'Erro no sistema. Tente novamente mais tarde.']);
