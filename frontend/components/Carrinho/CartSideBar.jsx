@@ -4,11 +4,6 @@ import gsap from 'gsap';
 import { CartItem } from './CartItem'; 
 
 // Componente: barra lateral do carrinho
-// Props:
-//  - onClose: callback quando a barra fecha
-//  - items: array de itens do carrinho
-//  - onUpdateQuantity: atualiza quantidade de um item
-//  - onRemoveItem: remove um item
 export function CartSidebar({ 
   onClose,
   items = [], 
@@ -29,11 +24,9 @@ export function CartSidebar({
   };
 
   // useLayoutEffect para gerenciar animações de entrada/saída com GSAP
-  // Observa isClosing para decidir entre abrir ou fechar animação
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       if (isClosing) {
-        // Anima overlay para desaparecer e painel para sair pela direita
         gsap.to(overlayRef.current, { 
           opacity: 0, 
           duration: 0.3, 
@@ -43,10 +36,9 @@ export function CartSidebar({
           x: '100%', 
           duration: 0.4, 
           ease: 'power3.in',
-          onComplete: onClose // chama callback ao terminar animação
+          onComplete: onClose 
         });
       } else {
-        // Anima entrada: overlay e painel vindo da direita
         gsap.from(overlayRef.current, { 
           opacity: 0, 
           duration: 0.3, 
@@ -60,7 +52,7 @@ export function CartSidebar({
       }
     }, [cartRef, overlayRef]);
 
-    return () => ctx.revert(); // limpa contexto GSAP ao desmontar/atualizar
+    return () => ctx.revert(); 
   }, [isClosing, onClose]);
 
   // Cálculo de valores exibidos no rodapé do carrinho
@@ -69,22 +61,53 @@ export function CartSidebar({
   const frete = 9.99;
   const total = subtotal + taxaServico + frete;
 
+  // --- NOVA FUNÇÃO: REDIRECIONAMENTO WHATSAPP ---
+  const finalizarPeloWhatsapp = () => {
+    // 1.NÚMERO DO ZAP (DDI + DDD + NUMERO)
+    const numeroLoja = "+5521987112208"; 
+
+    if (items.length === 0) {
+      alert("Seu carrinho está vazio!");
+      return;
+    }
+
+    let mensagem = "👋 Olá! Gostaria de finalizar o seguinte pedido:\n\n";
+    
+    items.forEach((item) => {
+      // Nota: Assumi que o nome do prato é 'item.nome'. Se for 'item.name' ou 'item.titulo'
+      const valorItem = item.preco * item.quantity;
+      mensagem += `🍔 *${item.quantity}x ${item.nome || item.name || "Item"}*\n`; 
+      mensagem += `   (R$ ${item.preco.toFixed(2)} cada) = R$ ${valorItem.toFixed(2)}\n`;
+    });
+
+    mensagem += `\n📦 *Subtotal:* R$ ${subtotal.toFixed(2)}`;
+    mensagem += `\n🚚 *Taxas e Frete:* R$ ${(taxaServico + frete).toFixed(2)}`;
+    mensagem += `\n💰 *TOTAL:* R$ ${total.toFixed(2)}`;
+    mensagem += `\n\n📍 *Endereço de Entrega:* \n(Escreva aqui)`;
+
+    const textoCodificado = encodeURIComponent(mensagem);
+    const linkZap = `https://wa.me/${numeroLoja}?text=${textoCodificado}`;
+    
+    window.open(linkZap, '_blank');
+  };
+  // ----------------------------------------------
+
   return (
     <main>
-      {/* Overlay semitransparente: fecha o carrinho ao clicar */}
+      {/* Overlay semitransparente */}
       <div
         ref={overlayRef}
         onClick={triggerClose}
         className="fixed inset-0 bg-black opacity-50 z-40 cursor-pointer"
       />
 
-      {/* Painel do carrinho: container principal (posicionado à direita) */}
+      {/* Painel do carrinho */}
       <aside
         ref={cartRef}
         className="fixed top-0 right-0 h-full w-full max-w-[800px] bg-[#F9F5E9] text-[#261A10] 
                    shadow-xl flex flex-col z-50"
       >
-        {/* Cabeçalho: título e botão de fechar */}
+        {/* Cabeçalho */}
         <header className="flex items-center justify-between p-8 bg-[#F2A71B] shadow-md">
           <h2 className="text-2xl archivo font-black text-[#261A10]">SEU CARRINHO</h2>
           <button 
@@ -95,7 +118,7 @@ export function CartSidebar({
           </button>
         </header>
 
-        {/* Lista de itens: renderiza CartItem ou mensagem de vazio */}
+        {/* Lista de itens */}
         <div className="flex-grow p-8 overflow-y-auto lora">
           {items.length === 0 ? (
             <p className="text-center text-[#6B594A]">Seu carrinho está vazio.</p>
@@ -107,7 +130,6 @@ export function CartSidebar({
                   onUpdateQuantity={onUpdateQuantity}
                   onRemove={onRemoveItem}
                 />
-                {/* Linha divisória entre itens, exceto após o último */}
                 {index < items.length - 1 && (
                   <hr className="border-dashed border-[#6B594A]/80 my-4" />
                 )}
@@ -116,7 +138,7 @@ export function CartSidebar({
           )}
         </div>
 
-        {/* Rodapé: resumo de valores e botões de ação */}
+        {/* Rodapé */}
         <footer className="p-8 border-t-2 border-[#6B594A]/50">
           <div className="space-y-2 text-[#6B594A] lora">
             <div className="flex justify-between">
@@ -140,12 +162,17 @@ export function CartSidebar({
             <span>R$ {total.toFixed(2).replace('.', ',')}</span>
           </div>
 
-          {/* Botões: continuar comprando e finalizar compra */}
+          {/* Botões */}
           <div className="flex flex-col gap-3 archivo font-semibold">
             <button className="w-full py-4 px-6 rounded-full border border-[#6B594A] text-[#6B594A] cursor-pointer hover:bg-black/5 transition-colors">
               CONTINUAR COMPRANDO
             </button>
-            <button className="w-full py-4 px-6 rounded-full bg-[#F2A71B] text-[#261A10] font-bold cursor-pointer hover:bg-[#E0991A] transition-colors">
+            
+            {/* AQUI ESTÁ O BOTÃO MODIFICADO */}
+            <button 
+              onClick={finalizarPeloWhatsapp}
+              className="w-full py-4 px-6 rounded-full bg-[#F2A71B] text-[#261A10] font-bold cursor-pointer hover:bg-[#E0991A] transition-colors"
+            >
               FINALIZAR COMPRA
             </button>
           </div>

@@ -53,8 +53,8 @@ const Header = forwardRef(({ onCartClick, itemCount }, ref) => {
                     
                     {/* Link para área do usuário com ícone */}
                     <Link to="/">
-                        <li className="cursor-pointer px-2 py-2 rounded-full border-2 border-[#f2a71b] text-[#f2a71b] font-medium archivo tracking-widest transition-all duration-300 hover:bg-[#f2a71b] hover:text-[#261a10] ease-out"><User size={28}/></li>
-                    </Link>
+                        {/*<li className="cursor-pointer px-2 py-2 rounded-full border-2 border-[#f2a71b] text-[#f2a71b] font-medium archivo tracking-widest transition-all duration-300 hover:bg-[#f2a71b] hover:text-[#261a10] ease-out"><User size={28}/></li>*/}
+                    </Link> 
                 </ul>
 
             </div>
