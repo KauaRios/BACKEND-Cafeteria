@@ -64,26 +64,26 @@ export function CartSidebar({
   // --- NOVA FUNÇÃO: REDIRECIONAMENTO WHATSAPP ---
   const finalizarPeloWhatsapp = () => {
     // 1.NÚMERO DO ZAP (DDI + DDD + NUMERO)
-    const numeroLoja = "+5521987112208"; 
+    const numeroLoja = "+5521995261672"; 
 
     if (items.length === 0) {
       alert("Seu carrinho está vazio!");
       return;
     }
 
-    let mensagem = "👋 Olá! Gostaria de finalizar o seguinte pedido:\n\n";
+    let mensagem = "Olá! Gostaria de finalizar o seguinte pedido:\n\n";
     
     items.forEach((item) => {
       // Nota: Assumi que o nome do prato é 'item.nome'. Se for 'item.name' ou 'item.titulo'
       const valorItem = item.preco * item.quantity;
-      mensagem += `🍔 *${item.quantity}x ${item.nome || item.name || "Item"}*\n`; 
+      mensagem += ` *${item.quantity}x ${item.nome || item.name || "Item"}*\n`; 
       mensagem += `   (R$ ${item.preco.toFixed(2)} cada) = R$ ${valorItem.toFixed(2)}\n`;
     });
 
-    mensagem += `\n📦 *Subtotal:* R$ ${subtotal.toFixed(2)}`;
-    mensagem += `\n🚚 *Taxas e Frete:* R$ ${(taxaServico + frete).toFixed(2)}`;
-    mensagem += `\n💰 *TOTAL:* R$ ${total.toFixed(2)}`;
-    mensagem += `\n\n📍 *Endereço de Entrega:* \n(Escreva aqui)`;
+    mensagem += `\n *Subtotal:* R$ ${subtotal.toFixed(2)}`;
+    mensagem += `\n *Taxas e Frete:* R$ ${(taxaServico + frete).toFixed(2)}`;
+    mensagem += `\n *TOTAL:* R$ ${total.toFixed(2)}`;
+    mensagem += `\n\n *Endereço de Entrega:* \n(Escreva aqui)`;
 
     const textoCodificado = encodeURIComponent(mensagem);
     const linkZap = `https://wa.me/${numeroLoja}?text=${textoCodificado}`;
